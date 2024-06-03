@@ -2,6 +2,11 @@
 
 ⚙️ Built using NextJS, Hardhat, Viem, and Typescript.
 
+this repo is classified into two branches
+
+- `main` branch: this is the starter kits for the
+- `updated` branch: this branch contains the updated code from the tutorial
+
 ## Requirements
 
 Before you begin, you need to install the following tools:
@@ -17,7 +22,7 @@ To get started with AssetChain Startkit , follow the steps below:
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/AssetChain-Academy/Mint-an-Nft.git
+git clone https://github.com/xendfinance/Mint-an-Nft.git
 
 cd Mint-an-Nft
 cd frontend 
