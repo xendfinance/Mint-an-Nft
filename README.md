@@ -47,3 +47,5 @@ npm run dev
 Visit your app on: `http://localhost:3000`.
 
 
+With :heart:, <a href="https://github.com/KodeSage" target="_blank">James Harrison</a> 
+
