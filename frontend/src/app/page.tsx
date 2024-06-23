@@ -1,9 +1,8 @@
 "use client";
-import { useAccount } from "wagmi";
 import Debug from "@/components/Debug";
 
 export default function Home() {
-  const { address: connectedAddress } = useAccount();
+
   return (
     <>
       <div className="pt-10">

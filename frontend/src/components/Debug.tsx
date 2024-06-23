@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 import deployedContracts from "@/contracts/deployedContracts";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   createPublicClient,
   createWalletClient,
@@ -23,24 +23,38 @@ const Debug = () => {
   const [loading, setLoading] = useState(false);
   const [transactionHash, setTransactionHash] = useState<any>("");
   const { address: account } = useAccount();
+  const [publicClient, setPublicClient] = useState<any>(null);
+  const [walletClient, setWalletClient] = useState<any>(null);
   const isEmpty = (obj: any) => {
     return Object.keys(obj).length === 0;
   };
-  const publicClient = createPublicClient({
-    chain: assetchain_testnet,
-    transport: http(),
-  });
+  // const publicClient = createPublicClient({
+  //   chain: assetchain_testnet,
+  //   transport: http(),
+  // });
 
-  const walletClient = createWalletClient({
-    chain: assetchain_testnet,
-    transport: custom(window.ethereum!),
-  });
+  // const walletClient = createWalletClient({
+  //   chain: assetchain_testnet,
+  //   transport: custom(window.ethereum!),
+  // });
 
-  const contract = getContract({
-    address: deployedContracts.assetchain_testnet.address as `0x${string}`,
-    abi: deployedContracts.assetchain_testnet.abi,
-    client: publicClient,
-  });
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPublicClient(
+        createPublicClient({
+          chain: assetchain_testnet,
+          transport: http(),
+        })
+      );
+
+      setWalletClient(
+        createWalletClient({
+          chain: assetchain_testnet,
+          transport: custom(window.ethereum!),
+        })
+      );
+    }
+  }, []);
 
   const MintNFt = async () => {
     if (url.trim() == "" || name.trim() == "" || description.trim() == "") {
@@ -65,7 +79,7 @@ const Debug = () => {
       duration: 8000,
     });
 
-    if (!account) return;
+     if (!account || !publicClient || !walletClient) return;
     const { request } = await publicClient.simulateContract({
       address: deployedContracts.assetchain_testnet.address as `0x${string}`,
       abi: deployedContracts.assetchain_testnet.abi,
@@ -76,10 +90,10 @@ const Debug = () => {
     console.log("pinataResponse", pinataResponse);
     const hash = await walletClient.writeContract(request);
     setTransactionHash(hash);
-     toast.success("Successfully Minted your NFT", {
-       duration: 4000,
-     });
-     setLoading(false);
+    toast.success("Successfully Minted your NFT", {
+      duration: 4000,
+    });
+    setLoading(false);
   };
 
   const disableButton = !account;
@@ -109,7 +123,7 @@ const Debug = () => {
                     <p className="my-0 break-words font-extrabold">mintNft</p>
                     <div>
                       <h2> Link to asset: </h2>
-                     
+
                       <input
                         type="text"
                         className="input input-ghost focus-within:border-transparent focus:outline-none focus:bg-transparent focus:text-gray-400 h-[2.2rem] min-h-[2.2rem] px-4 border w-full font-medium placeholder:text-accent/50 text-gray-400"
@@ -151,7 +165,7 @@ const Debug = () => {
                     </button>
                     {transactionHash && (
                       <Link
-                        href={`https://testnet.xendrwachain.com/transactions/${transactionHash}`}
+                        href={`https://testnet.assetchain.org/transactions/${transactionHash}`}
                         target="_blank"
                       >
                         view transaction hash here
